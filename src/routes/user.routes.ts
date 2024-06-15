@@ -1,19 +1,14 @@
-import express from 'express';
+import express, { Router } from 'express';
+import userControllers from '../controllers/user.controllers';
+import passport from '../middleware/auth.middleware';
 
-class UserRoutes{
-    userRouter;
-    constructor(){
-        this.userRouter = express.Router();
-        this.initializeUserRouter()
-    }
+const userRouters: Router = express.Router();
 
-    initializeUserRouter(){
-        this.userRouter.get('/', (request, response) => {
-            response.send({
-                message: "Works"
-            })
-        })
-    }
-}
-
-export default new UserRoutes().userRouter;
+userRouters.post('/api/v1/register', userControllers.registerUserController);
+userRouters.post('/api/v1/login', userControllers.loginUserController);
+userRouters.get('/api', passport.authenticate('jwt', {session: false}), (req, res) => {
+    res.send({
+        mes: "dvsdfsd"
+    })
+})
+export default userRouters;
